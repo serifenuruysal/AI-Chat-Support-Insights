@@ -146,3 +146,4 @@ Next: Ads Dashboard component (`/components/dashboard/AdsDashboard.tsx`) with:
 - USDC payout tracking
 - Audience targeting analytics
 # AI-Chat-Support-Insights
+# AI-Chat-Support-Insights
