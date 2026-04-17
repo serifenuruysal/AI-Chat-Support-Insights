@@ -45,7 +45,7 @@ const server = http.createServer(app);
 setupWebSocket(server);
 
 const PORT = process.env.PORT || 4000;
-server.listen(PORT, () => {
+server.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
   console.log(`🤖 AI provider: ${process.env.AI_PROVIDER || 'mock'}`);
   console.log(`🔌 WebSocket: ws://localhost:${PORT}/ws`);
