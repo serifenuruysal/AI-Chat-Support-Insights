@@ -16,7 +16,15 @@ const app = express();
 
 // ─── Security middleware ───────────────────────────────────────────────────
 app.use(helmet());
-app.use(cors({ origin: process.env.CORS_ORIGIN || 'http://localhost:5173', credentials: true }));
+const ALLOWED_ORIGINS = (process.env.CORS_ORIGIN || 'http://localhost:5173,http://localhost:8081')
+  .split(',').map(o => o.trim());
+app.use(cors({
+  origin: (origin, cb) => {
+    if (!origin || ALLOWED_ORIGINS.some(o => origin.startsWith(o))) return cb(null, true);
+    cb(new Error('CORS: ' + origin + ' not allowed'));
+  },
+  credentials: true,
+}));
 app.use(express.json({ limit: '1mb' }));
 
 // Rate limiting — 60 req/min per IP
