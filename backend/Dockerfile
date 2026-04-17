@@ -5,10 +5,10 @@ WORKDIR /app
 # Build deps for native modules (better-sqlite3)
 RUN apk add --no-cache python3 make g++
 
-COPY package*.json ./
+COPY backend/package*.json ./
 RUN npm ci --only=production
 
-COPY src ./src
+COPY backend/src ./src
 
 EXPOSE 4000
 
