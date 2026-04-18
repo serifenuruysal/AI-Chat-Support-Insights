@@ -30,7 +30,7 @@ async function sendMessage({ userId, content, conversationId }) {
   let conv;
   if (conversationId) {
     conv = db.prepare('SELECT * FROM conversations WHERE id = ? AND user_id = ?').get(conversationId, userId);
-    if (!conv) throw new Error('Conversation not found');
+    if (!conv) conv = getOrCreateConversation(userId);
   } else {
     conv = getOrCreateConversation(userId);
   }
