@@ -45,7 +45,7 @@ async function openaiChat(messages, systemPrompt) {
 
   const start = Date.now();
   const response = await client.chat.completions.create({
-    model: process.env.OPENAI_MODEL || 'gpt-4-turbo-preview',
+    model: process.env.OPENAI_MODEL || 'gpt-4o',
     messages: [
       { role: 'system', content: systemPrompt },
       ...messages.map(m => ({ role: m.role, content: m.content })),
