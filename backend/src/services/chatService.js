@@ -27,16 +27,27 @@ async function getConversationHistory(pool, conversationId, limit = 20) {
   return rows;
 }
 
-async function sendMessage({ userId, content, conversationId }) {
+async function createNewConversation(pool, userId) {
+  const id = uuidv4();
+  const { rows } = await pool.query(
+    'INSERT INTO conversations (id, user_id) VALUES ($1, $2) RETURNING *',
+    [id, userId]
+  );
+  return rows[0];
+}
+
+async function sendMessage({ userId, content, conversationId, forceNew }) {
   const pool = getDb();
 
   let conv;
-  if (conversationId) {
+  if (forceNew) {
+    conv = await createNewConversation(pool, userId);
+  } else if (conversationId) {
     const { rows } = await pool.query(
       'SELECT * FROM conversations WHERE id = $1 AND user_id = $2',
       [conversationId, userId]
     );
-    conv = rows[0] || await getOrCreateConversation(pool, userId);
+    conv = rows[0] || await createNewConversation(pool, userId);
   } else {
     conv = await getOrCreateConversation(pool, userId);
   }

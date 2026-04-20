@@ -8,6 +8,7 @@ const SendSchema = z.object({
   content:        z.string().min(1).max(4000),
   userId:         z.string().min(1).max(100),
   conversationId: z.string().uuid().optional(),
+  forceNew:       z.boolean().optional(),
 });
 
 // POST /api/chat/message
