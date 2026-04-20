@@ -171,29 +171,6 @@ Results are stored per message and rolled up into live aggregates. The topic sum
 
 ---
 
-## Database Schema
-
-```
-conversations
-  id, user_id, created_at, updated_at, metadata
-
-messages
-  id, conversation_id, role, content,
-  created_at, tokens_used, ai_provider, latency_ms
-
-message_analytics
-  id, message_id, conversation_id, user_id,
-  sentiment, sentiment_score, topics (JSONB),
-  intent, is_complaint, is_feature_request,
-  keywords (JSONB), analyzed_at
-
-topic_summary
-  topic (PK), count, sentiment_avg,
-  last_seen, sample_messages (JSONB)
-```
-
-All tables indexed on the high-frequency query columns: `user_id`, `conversation_id`, `sentiment`, `is_complaint`, `analyzed_at`.
-
 ---
 
 ## Security & Reliability
@@ -263,11 +240,11 @@ messengerDemo/
 - ✅ Mobile app running on iOS, Android, and web browser
 - ✅ Persistent PostgreSQL database (data survives redeployments)
 - ✅ Markdown-formatted AI responses (lists, bold, steps)
-- ✅ Production deployment on Railway + Vercel
+
 
 ---
 
-## Recommended Next Steps
+## TO DOs
 
 | Priority | Item |
 |---|---|
@@ -276,8 +253,7 @@ messengerDemo/
 | Medium | Per-user rate limiting (currently IP-based) |
 | Medium | Conversation session timeout (auto-close after 30min inactivity) |
 | Medium | Upgrade analytics tagging from keyword rules to embeddings (semantic similarity) |
-| Low | A/B testing across AI providers with satisfaction tracking |
-| Low | Admin web dashboard for human agent escalation |
+
 
 ---
 
