@@ -9,4 +9,4 @@ COPY backend/src ./src
 
 EXPOSE 4000
 
-CMD ["sh", "-c", "node src/db/migrate.js && node src/index.js"]
+CMD ["node", "src/index.js"]
