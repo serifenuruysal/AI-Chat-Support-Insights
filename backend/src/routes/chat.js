@@ -25,23 +25,23 @@ router.post('/message', async (req, res) => {
 });
 
 // GET /api/chat/conversations?userId=xxx
-router.get('/conversations', (req, res) => {
+router.get('/conversations', async (req, res) => {
   const { userId } = req.query;
   if (!userId) return res.status(400).json({ error: 'userId required' });
   try {
-    res.json({ conversations: getConversations(userId) });
+    res.json({ conversations: await getConversations(userId) });
   } catch (err) {
     res.status(500).json({ error: 'Failed to fetch conversations' });
   }
 });
 
 // GET /api/chat/messages/:conversationId?userId=xxx
-router.get('/messages/:conversationId', (req, res) => {
+router.get('/messages/:conversationId', async (req, res) => {
   const { userId } = req.query;
   const { conversationId } = req.params;
   if (!userId) return res.status(400).json({ error: 'userId required' });
   try {
-    res.json({ messages: getMessages(conversationId, userId) });
+    res.json({ messages: await getMessages(conversationId, userId) });
   } catch (err) {
     res.status(500).json({ error: 'Conversation not found' });
   }

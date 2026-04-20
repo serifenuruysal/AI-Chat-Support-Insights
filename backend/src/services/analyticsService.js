@@ -1,9 +1,3 @@
-/**
- * Analytics service.
- * Analyzes user messages for: sentiment, topics, intent, complaints, feature requests.
- * Uses a lightweight rule-based engine by default (no API calls).
- */
-
 const { getDb } = require('../db');
 const { v4: uuidv4 } = require('uuid');
 
@@ -64,98 +58,97 @@ async function analyzeMessage({ messageId, conversationId, userId, content }) {
   const topics = extractTopics(content);
   const keywords = extractKeywords(content);
   const intent = detectIntent(content);
-  const is_complaint = COMPLAINT_SIGNALS.some(s => lower.includes(s)) ? 1 : 0;
-  const is_feature_request = FEATURE_SIGNALS.some(s => lower.includes(s)) ? 1 : 0;
+  const is_complaint = COMPLAINT_SIGNALS.some(s => lower.includes(s));
+  const is_feature_request = FEATURE_SIGNALS.some(s => lower.includes(s));
 
-  const db = getDb();
-  const id = uuidv4();
+  const pool = getDb();
 
-  db.prepare(`
-    INSERT OR REPLACE INTO message_analytics
-    (id, message_id, conversation_id, user_id, sentiment, sentiment_score, topics, intent, is_complaint, is_feature_request, keywords)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `).run(id, messageId, conversationId, userId, sentiment, sentiment_score,
-    JSON.stringify(topics), intent, is_complaint, is_feature_request, JSON.stringify(keywords));
+  await pool.query(
+    `INSERT INTO message_analytics
+     (id, message_id, conversation_id, user_id, sentiment, sentiment_score, topics, intent, is_complaint, is_feature_request, keywords)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+     ON CONFLICT (id) DO NOTHING`,
+    [uuidv4(), messageId, conversationId, userId, sentiment, sentiment_score,
+     JSON.stringify(topics), intent, is_complaint, is_feature_request, JSON.stringify(keywords)]
+  );
 
-  // Update topic summary
-  topics.forEach(topic => {
-    const existing = db.prepare('SELECT * FROM topic_summary WHERE topic = ?').get(topic);
-    if (existing) {
-      const samples = JSON.parse(existing.sample_messages || '[]');
-      if (samples.length < 5) samples.push(content.slice(0, 120));
-      const newAvg = ((existing.sentiment_avg * existing.count) + sentiment_score) / (existing.count + 1);
-      db.prepare(`UPDATE topic_summary SET count = count + 1, sentiment_avg = ?, last_seen = CURRENT_TIMESTAMP, sample_messages = ? WHERE topic = ?`)
-        .run(parseFloat(newAvg.toFixed(3)), JSON.stringify(samples), topic);
-    } else {
-      db.prepare(`INSERT INTO topic_summary (id, topic, count, sentiment_avg, sample_messages) VALUES (?, ?, 1, ?, ?)`)
-        .run(uuidv4(), topic, sentiment_score, JSON.stringify([content.slice(0, 120)]));
-    }
-  });
+  // Upsert topic summary — atomic, fixes race condition
+  for (const topic of topics) {
+    await pool.query(
+      `INSERT INTO topic_summary (topic, count, sentiment_avg, last_seen, sample_messages)
+       VALUES ($1, 1, $2, NOW(), $3::jsonb)
+       ON CONFLICT (topic) DO UPDATE SET
+         count         = topic_summary.count + 1,
+         sentiment_avg = ROUND(((topic_summary.sentiment_avg * topic_summary.count) + $2) / (topic_summary.count + 1)::numeric, 3),
+         last_seen     = NOW(),
+         sample_messages = CASE
+           WHEN jsonb_array_length(topic_summary.sample_messages) < 5
+           THEN topic_summary.sample_messages || $3::jsonb
+           ELSE topic_summary.sample_messages
+         END`,
+      [topic, sentiment_score, JSON.stringify([content.slice(0, 120)])]
+    );
+  }
 
   return { sentiment, sentiment_score, topics, keywords, intent, is_complaint, is_feature_request };
 }
 
 // ─── Analytics queries ─────────────────────────────────────────────────────
-function getOverviewStats(days = 30) {
-  const db = getDb();
+async function getOverviewStats(days = 30) {
+  const pool = getDb();
   const since = new Date(Date.now() - days * 86400000).toISOString();
 
-  const total            = db.prepare('SELECT COUNT(*) as n FROM message_analytics WHERE analyzed_at >= ?').get(since);
-  const sentimentBreakdown = db.prepare(`SELECT sentiment, COUNT(*) as count FROM message_analytics WHERE analyzed_at >= ? GROUP BY sentiment`).all(since);
-  const complaints       = db.prepare(`SELECT COUNT(*) as n FROM message_analytics WHERE is_complaint = 1 AND analyzed_at >= ?`).get(since);
-  const features         = db.prepare(`SELECT COUNT(*) as n FROM message_analytics WHERE is_feature_request = 1 AND analyzed_at >= ?`).get(since);
-  const avgScore         = db.prepare(`SELECT AVG(sentiment_score) as avg FROM message_analytics WHERE analyzed_at >= ?`).get(since);
-  const byIntent         = db.prepare(`SELECT intent, COUNT(*) as count FROM message_analytics WHERE analyzed_at >= ? GROUP BY intent ORDER BY count DESC`).all(since);
-  const topTopics        = db.prepare(`SELECT topic, count, sentiment_avg FROM topic_summary ORDER BY count DESC LIMIT 10`).all();
-  const dailyVolume      = db.prepare(`
-    SELECT DATE(analyzed_at) as date, COUNT(*) as count,
-           ROUND(AVG(sentiment_score), 3) as avg_sentiment
-    FROM message_analytics WHERE analyzed_at >= ?
-    GROUP BY DATE(analyzed_at) ORDER BY date ASC
-  `).all(since);
-  const recentComplaints = db.prepare(`
-    SELECT ma.id, ma.user_id, ma.sentiment, ma.topics, ma.keywords, ma.analyzed_at, m.content
-    FROM message_analytics ma
-    JOIN messages m ON m.id = ma.message_id
-    WHERE ma.is_complaint = 1 ORDER BY ma.analyzed_at DESC LIMIT 20
-  `).all();
-
-  const avgLatency = db.prepare(`
-    SELECT ROUND(AVG(latency_ms)) as avg FROM messages
-    WHERE role = 'assistant' AND latency_ms IS NOT NULL AND created_at >= ?
-  `).get(since);
-
-  const activeUsers = db.prepare(`
-    SELECT COUNT(DISTINCT user_id) as n FROM message_analytics WHERE analyzed_at >= ?
-  `).get(since);
-
-  const peakHours = db.prepare(`
-    SELECT CAST(strftime('%H', analyzed_at) AS INTEGER) as hour, COUNT(*) as count
-    FROM message_analytics WHERE analyzed_at >= ?
-    GROUP BY hour ORDER BY hour ASC
-  `).all(since);
-
-  const returningUsers = db.prepare(`
-    SELECT COUNT(*) as n FROM (
-      SELECT user_id FROM conversations WHERE created_at >= ?
-      GROUP BY user_id HAVING COUNT(*) > 1
-    )
-  `).get(since);
+  const [
+    total, sentimentBreakdown, complaints, features, avgScore,
+    byIntent, topTopics, dailyVolume, recentComplaints,
+    avgLatency, activeUsers, peakHours, returningUsers,
+  ] = await Promise.all([
+    pool.query('SELECT COUNT(*)::int as n FROM message_analytics WHERE analyzed_at >= $1', [since]),
+    pool.query('SELECT sentiment, COUNT(*)::int as count FROM message_analytics WHERE analyzed_at >= $1 GROUP BY sentiment', [since]),
+    pool.query('SELECT COUNT(*)::int as n FROM message_analytics WHERE is_complaint = TRUE AND analyzed_at >= $1', [since]),
+    pool.query('SELECT COUNT(*)::int as n FROM message_analytics WHERE is_feature_request = TRUE AND analyzed_at >= $1', [since]),
+    pool.query('SELECT AVG(sentiment_score) as avg FROM message_analytics WHERE analyzed_at >= $1', [since]),
+    pool.query('SELECT intent, COUNT(*)::int as count FROM message_analytics WHERE analyzed_at >= $1 GROUP BY intent ORDER BY count DESC', [since]),
+    pool.query('SELECT topic, count, sentiment_avg FROM topic_summary ORDER BY count DESC LIMIT 10'),
+    pool.query(`
+      SELECT DATE(analyzed_at) as date, COUNT(*)::int as count, ROUND(AVG(sentiment_score)::numeric, 3) as avg_sentiment
+      FROM message_analytics WHERE analyzed_at >= $1
+      GROUP BY DATE(analyzed_at) ORDER BY date ASC`, [since]),
+    pool.query(`
+      SELECT ma.id, ma.user_id, ma.sentiment, ma.topics, ma.keywords, ma.analyzed_at, m.content
+      FROM message_analytics ma
+      JOIN messages m ON m.id = ma.message_id
+      WHERE ma.is_complaint = TRUE ORDER BY ma.analyzed_at DESC LIMIT 20`),
+    pool.query(`
+      SELECT ROUND(AVG(latency_ms)) as avg FROM messages
+      WHERE role = 'assistant' AND latency_ms IS NOT NULL AND created_at >= $1`, [since]),
+    pool.query(`
+      SELECT COUNT(DISTINCT user_id)::int as n FROM message_analytics WHERE analyzed_at >= $1`, [since]),
+    pool.query(`
+      SELECT EXTRACT(HOUR FROM analyzed_at)::int as hour, COUNT(*)::int as count
+      FROM message_analytics WHERE analyzed_at >= $1
+      GROUP BY hour ORDER BY hour ASC`, [since]),
+    pool.query(`
+      SELECT COUNT(*)::int as n FROM (
+        SELECT user_id FROM conversations WHERE created_at >= $1
+        GROUP BY user_id HAVING COUNT(*) > 1
+      ) sub`, [since]),
+  ]);
 
   return {
-    total: total.n,
-    complaints: complaints.n,
-    feature_requests: features.n,
-    avg_sentiment: parseFloat((avgScore.avg || 0).toFixed(3)),
-    avg_latency_ms: avgLatency.avg || 0,
-    active_users: activeUsers.n,
-    returning_users: returningUsers.n,
-    sentiment_breakdown: sentimentBreakdown,
-    by_intent: byIntent,
-    top_topics: topTopics,
-    daily_volume: dailyVolume,
-    recent_complaints: recentComplaints,
-    peak_hours: peakHours,
+    total: total.rows[0].n,
+    complaints: complaints.rows[0].n,
+    feature_requests: features.rows[0].n,
+    avg_sentiment: parseFloat((avgScore.rows[0].avg || 0).toFixed(3)),
+    avg_latency_ms: avgLatency.rows[0].avg || 0,
+    active_users: activeUsers.rows[0].n,
+    returning_users: returningUsers.rows[0].n,
+    sentiment_breakdown: sentimentBreakdown.rows,
+    by_intent: byIntent.rows,
+    top_topics: topTopics.rows,
+    daily_volume: dailyVolume.rows,
+    recent_complaints: recentComplaints.rows,
+    peak_hours: peakHours.rows,
   };
 }
 

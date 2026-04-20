@@ -1,18 +1,19 @@
-const Database = require('better-sqlite3');
-const path = require('path');
-const fs = require('fs');
+const { Pool } = require('pg');
 
-let _db = null;
+let _pool = null;
 
 function getDb() {
-  if (_db) return _db;
-  const dbPath = process.env.DATABASE_PATH || './data/chatbot.db';
-  const dir = path.dirname(dbPath);
-  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-  _db = new Database(dbPath);
-  _db.pragma('journal_mode = WAL');
-  _db.pragma('foreign_keys = ON');
-  return _db;
+  if (_pool) return _pool;
+  _pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: process.env.DATABASE_URL?.includes('railway') || process.env.NODE_ENV === 'production'
+      ? { rejectUnauthorized: false }
+      : false,
+    max: 10,
+    idleTimeoutMillis: 30000,
+  });
+  _pool.on('error', (err) => console.error('PG pool error:', err));
+  return _pool;
 }
 
 module.exports = { getDb };
