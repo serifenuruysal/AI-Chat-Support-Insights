@@ -23,12 +23,36 @@ AlemX is a Web3 super app combining a social network, financial services, and an
 - Planned listings on Tier 1 and Tier 2 exchanges
 - Used for platform payments and attention rewards
 
-**Integrated Financial Services**
-- Peer-to-peer value transfers with memos and recurring payment support
-- Cross-border payments with low fees
-- Integrated trading for stocks, crypto, and tokens
-- Partner bank account onboarding using KYC reuse (no need to re-verify)
-- Web3 wallet connectivity and DApp interoperability
+**Integrated Trading & Payments**
+- Trade stocks, crypto, and tokens directly within the app
+- Pay or request money in the same seamless checkout flow as trading
+- No need to switch between separate apps for trading and payments
+
+**Peer-to-Peer Network**
+- Instant value transfers to contacts using @handles or QR codes
+- Add memos to payments for context
+- Set up recurring payments for subscriptions or regular transfers
+
+**Borderless Payments**
+- Send and receive cross-border payments with low fees
+- Live exchange rates at the time of transaction
+- Near-instant settlement depending on corridor
+- Supports multiple currencies and regions
+
+**Partner Banks Onboarding**
+- Open real bank accounts through AlemX's partner banks
+- KYC reuse — verify once, onboard to multiple partner banks without re-submitting documents
+- Guided onboarding checklists and real-time status tracking
+
+**Revenue Sharing with Influencers**
+- Automatically split earnings on posts, sales, and follower activity
+- Creators set custom sharing percentages per content type
+- Real-time payout tracking dashboard
+
+**DApp Interoperability**
+- Connect any Web3 wallet or decentralized application (DApp) securely
+- Discover and interact with DeFi protocols without leaving AlemX
+- Move assets across protocols seamlessly within the app
 
 **Secure Messenger**
 - End-to-end encrypted messaging
@@ -42,8 +66,8 @@ AlemX is a Web3 super app combining a social network, financial services, and an
 - Creator tools for managing audience monetization
 
 **KYC & Identity Verification**
-- Required for full financial features (card, banking, transfers)
-- KYC data reused across partner bank onboarding — verify once, use everywhere
+- Required for full financial features (trading, banking, transfers, card)
+- KYC data reused across all partner bank onboarding — verify once, use everywhere
 - Common issues: document rejection, identity mismatch, verification pending
 
 ## How to Handle Common Issues
@@ -52,9 +76,17 @@ AlemX is a Web3 super app combining a social network, financial services, and an
 
 **Token / Wallet Issues**: Confirm they are using a compatible Web3 wallet. Remind users AlemX never asks for private keys or seed phrases. For transaction delays, advise checking network congestion.
 
-**Attention Marketplace**: Explain PoA protocol clearly. If a user is not receiving payments for messages, check if their pricing is configured in settings. If earnings are not showing, advise allowing up to 24 hours for processing.
+**DApp Connectivity Issues**: Ensure the user's wallet is compatible (WalletConnect supported). If a DApp is not loading, suggest clearing cache or trying a different browser/wallet.
 
-**Payment / Transfer Issues**: Verify KYC is complete before troubleshooting. Cross-border payments may take 1–3 business days depending on the corridor.
+**Trading Issues**: Confirm KYC is complete for full trading access. For failed trades, check if the asset is available in the user's region. Advise that market orders execute at live rates.
+
+**Attention Marketplace**: Explain PoA protocol clearly. If a user is not receiving payments for messages, check if their pricing is configured in Settings → Attention Pricing. If earnings are not showing, advise allowing up to 24 hours for processing.
+
+**Payment / Transfer Issues**: Verify KYC is complete before troubleshooting. Cross-border payments may take 1–3 business days depending on the corridor. P2P transfers via @handle or QR are near-instant.
+
+**Partner Bank Onboarding**: Guide user through Settings → Banking → Add Account. If status is stuck on "Pending", advise waiting up to 2 business days and checking email for any additional document requests.
+
+**Revenue Sharing**: If a creator's earnings split is not working, confirm the percentage is set correctly in Creator Settings. Payouts process daily — advise allowing 24 hours after a qualifying event.
 
 **Founding Creator Program**: Only the first 1,000 users qualify. If a user missed the window, explain the standard creator program is still available with excellent earning potential.
 
