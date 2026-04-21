@@ -8,14 +8,19 @@ const COMPLAINT_SIGNALS  = ['not working', "doesn't work", 'broken', 'bug', 'cra
 const FEATURE_SIGNALS    = ['would be nice', 'should have', 'wish', 'feature request', 'can you add', 'please add', 'support for', 'integrate', 'when will'];
 
 const TOPIC_KEYWORDS = {
-  wallet:       ['wallet', 'solana', 'sol', 'private key', 'seed phrase', 'balance', 'address', 'transaction', 'send', 'receive', 'transfer'],
-  payment_card: ['card', 'payment', 'visa', 'mastercard', 'checkout', 'purchase', 'declined', 'spend', 'limit'],
-  kyc:          ['kyc', 'verify', 'verification', 'identity', 'document', 'passport', 'id', 'approved', 'rejected'],
-  messenger:    ['message', 'chat', 'dm', 'encrypted', 'inbox', 'notification', 'read receipt'],
-  marketplace:  ['marketplace', 'attention', 'earn', 'usdc', 'brand', 'sponsored', 'campaign', 'influencer'],
-  social:       ['feed', 'post', 'follow', 'like', 'comment', 'profile', 'share'],
-  onboarding:   ['signup', 'register', 'login', 'account', 'password', 'setup', 'getting started', 'new user'],
-  performance:  ['slow', 'lag', 'loading', 'freeze', 'crash', 'battery', 'memory'],
+  attention_marketplace: ['attention', 'marketplace', 'proof of attention', 'poa', 'earn', 'earning', 'influencer', 'creator', 'sponsored', 'campaign', 'paid message', 'message price', 'inbox price', 'attention price'],
+  alem_token:            ['alem', '$alem', 'token', 'listing', 'exchange', 'tier 1', 'tier 2', 'pre-listing', 'investment', 'tokenomics', 'reward'],
+  kyc:                   ['kyc', 'verify', 'verification', 'identity', 'document', 'passport', 'id', 'approved', 'rejected', 'pending', 'resubmit', 'id check'],
+  trading:               ['trade', 'trading', 'stocks', 'crypto', 'token', 'buy', 'sell', 'market', 'order', 'portfolio', 'checkout', 'purchase', 'asset'],
+  p2p_transfers:         ['p2p', 'peer to peer', 'transfer', 'send money', 'receive money', 'qr code', '@handle', 'contact', 'memo', 'recurring', 'instant transfer'],
+  borderless_payments:   ['borderless', 'cross-border', 'international', 'payment', 'exchange rate', 'low fee', 'settlement', 'corridor', 'foreign', 'currency', 'wire'],
+  partner_banks:         ['bank', 'banking', 'partner bank', 'bank account', 'open account', 'onboarding', 'bank onboarding', 'account status', 'bank transfer'],
+  revenue_sharing:       ['revenue', 'revenue sharing', 'earnings split', 'payout', 'creator share', 'percentage', 'split', 'commission', 'creator earnings'],
+  dapp_wallet:           ['dapp', 'wallet', 'web3', 'walletconnect', 'defi', 'protocol', 'private key', 'seed phrase', 'connect wallet', 'interoperability', 'smart contract', 'blockchain'],
+  messenger:             ['message', 'chat', 'dm', 'encrypted', 'inbox', 'notification', 'video call', 'call price', 'paid call', 'read receipt'],
+  social:                ['feed', 'post', 'follow', 'like', 'comment', 'profile', 'share', 'content', 'creator'],
+  onboarding:            ['signup', 'register', 'login', 'account', 'password', 'setup', 'getting started', 'new user', 'founding creator'],
+  performance:           ['slow', 'lag', 'loading', 'freeze', 'crash', 'battery', 'memory', 'bug', 'not working'],
 };
 
 // ─── Analysis helpers ──────────────────────────────────────────────────────
