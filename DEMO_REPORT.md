@@ -15,7 +15,7 @@ AlemX users open the messenger and instantly chat with an AI support assistant t
 
 Beyond the chat experience, every conversation is automatically analyzed in the background — sentiment, intent, topic, complaints, feature requests — and that intelligence surfaces in a real-time analytics dashboard giving the AlemX team instant visibility into what users are struggling with, what they want, and how they feel about the product.
 
-The platform is fully deployed, live on Railway (backend) and Vercel (web), and ready for demonstration.
+The platform is fully deployed, live on Railway (backend), Vercel (web), iOS, and Android, and ready for demonstration.
 
 ---
 
