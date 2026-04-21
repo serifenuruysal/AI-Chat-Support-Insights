@@ -1,4 +1,4 @@
-# AlemX AI Support — Demo Report
+# AlemX  — Demo Report
 ### AI-Powered Customer Support Platform for AlemX
 **Prepared for:** Project Owner  
 **Date:** April 21, 2026  
