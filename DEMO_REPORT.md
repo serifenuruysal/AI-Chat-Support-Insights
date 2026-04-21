@@ -1,5 +1,5 @@
 # AlemX AI Support — Demo Report
-### AI-Powered Customer Support & Product Intelligence Platform for AlemX
+### AI-Powered Chatbot Inside the AlemX Messenger
 **Prepared for:** Project Owner  
 **Date:** April 21, 2026  
 **Version:** 1.0.0  
@@ -9,17 +9,11 @@
 
 ## Executive Summary
 
-AlemX AI Support is not a chatbot inside a messenger. It is a production-grade **customer support operations platform** built specifically for [AlemX](https://www.alemx.com) — the next-generation Web3 social platform powered by the Proof-of-Attention (PoA) protocol.
+AlemX AI Support is a production-grade, AI-powered chatbot built directly inside the AlemX messenger experience — purpose-built for [AlemX](https://www.alemx.com), the next-generation Web3 social platform powered by the Proof-of-Attention (PoA) protocol.
 
-The chat interface is the user-facing surface. The real product is what happens behind it.
+AlemX users open the messenger and instantly chat with an AI support assistant that knows everything about the AlemX platform. No waiting for a support agent. No searching through documentation. The assistant handles questions across the full product suite — from PoA protocol and $Alem token to Visa card activation, KYC verification, and city event dates — 24/7, in any language.
 
-Every conversation is automatically analyzed in real time — sentiment, intent, topic, complaint signals, feature requests, and user language — and that intelligence rolls up into a live dashboard that tells the AlemX team exactly what users are struggling with, what they want built, and how they feel about the product. No manual ticket review. No spreadsheets. No support agents needed.
-
-**The two-layer value proposition:**
-
-**Layer 1 — User-facing:** An AI support assistant that handles questions across the full AlemX product suite instantly, 24/7, in any language. Users get answers in seconds. The assistant knows everything about AlemX — from PoA protocol and $Alem token to Visa card activation and city event dates — and escalates to the team only when genuinely needed.
-
-**Layer 2 — Team-facing:** Every message becomes structured product data. The AlemX product and support teams get a live view of support health: which features are causing the most friction, which users are churning, what features are being requested, and when users are most active. Insights that previously required a support team to manually tag and categorize tickets are now automatic and real-time.
+Beyond the chat experience, every conversation is automatically analyzed in the background — sentiment, intent, topic, complaints, feature requests — and that intelligence surfaces in a real-time analytics dashboard giving the AlemX team instant visibility into what users are struggling with, what they want, and how they feel about the product.
 
 The platform is fully deployed, live on Railway (backend) and Vercel (web), and ready for demonstration.
 
@@ -37,21 +31,11 @@ The platform is fully deployed, live on Railway (backend) and Vercel (web), and 
 
 ## What the Product Does
 
-### For AlemX users
-Users open the app and get instant answers from an AI assistant that knows everything about the AlemX platform. No waiting for a support agent. No searching through documentation. The assistant handles the full product — from PoA protocol and $Alem token to Visa card activation, KYC troubleshooting, city event dates, and DApp connectivity — and always escalates to `hello@alemx.com` when a human touch is genuinely needed.
+AlemX users open the messenger and chat with an AI support assistant that knows everything about AlemX's platform. The assistant handles questions across the full product — from PoA protocol and $Alem token to Visa card activation, city event dates, and DApp connectivity — always escalating to `hello@alemx.com` when a human touch is needed.
 
-### For the AlemX team
-Every message sent by a user is silently and automatically analyzed in the background — without slowing down the AI response. The system detects sentiment, classifies intent, identifies which product area the message is about, flags complaints, captures feature requests, and detects the user's language. All of that data is aggregated and surfaced in a real-time analytics dashboard.
+Every message is automatically tagged in the background — sentiment, intent, topic, complaints, feature requests — and all of that intelligence surfaces in a real-time analytics dashboard available to the AlemX product and support teams.
 
-The team can see at a glance:
-- Which features are generating the most support volume
-- Where users are frustrated (negative sentiment spikes by topic)
-- What users want built next (feature request stream)
-- Which conversations need human follow-up (escalation flags)
-- When users are most active (peak hours)
-- Which languages users are writing in (global reach visibility)
-
-**The result:** Support that runs without agents, and a continuous stream of product intelligence that previously required a team of people manually reading and tagging tickets.
+The result: support that scales with zero human agents, and product insights that used to require manual ticket review.
 
 ---
 
