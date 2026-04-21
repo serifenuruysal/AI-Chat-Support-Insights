@@ -1,6 +1,26 @@
 const { getDb } = require('../db');
 const { v4: uuidv4 } = require('uuid');
 
+// ─── Language detection (lightweight heuristic) ───────────────────────────────
+const LANG_PATTERNS = {
+  es: /\b(hola|gracias|por favor|necesito|ayuda|problema|cómo|qué|está|hacer|tengo|quiero)\b/i,
+  fr: /\b(bonjour|merci|s'il vous plaît|besoin|aide|problème|comment|qu'est|avoir|faire|je|vous)\b/i,
+  de: /\b(hallo|danke|bitte|hilfe|problem|wie|ich|sie|haben|machen|brauche)\b/i,
+  pt: /\b(olá|obrigado|por favor|preciso|ajuda|problema|como|que|está|fazer|tenho|quero)\b/i,
+  ru: /[Ѐ-ӿ]/,
+  ar: /[؀-ۿ]/,
+  zh: /[一-鿿]/,
+  ja: /[぀-ヿ]/,
+  ko: /[가-힯]/,
+};
+
+function detectLanguage(text) {
+  for (const [lang, pattern] of Object.entries(LANG_PATTERNS)) {
+    if (pattern.test(text)) return lang;
+  }
+  return 'en';
+}
+
 // ─── Keyword dictionaries ──────────────────────────────────────────────────
 const SENTIMENT_POSITIVE = ['great', 'love', 'excellent', 'perfect', 'awesome', 'helpful', 'thanks', 'thank', 'good', 'nice', 'easy', 'fast', 'works', 'solved', 'fixed'];
 const SENTIMENT_NEGATIVE = ['broken', 'bug', 'error', 'fail', 'failed', 'issue', 'problem', 'wrong', 'stuck', 'crash', 'slow', 'not working', 'cannot', "can't", 'unable', 'lost', 'missing', 'frustrat', 'disappoint', 'terrible', 'useless', 'awful'];
@@ -68,17 +88,30 @@ async function analyzeMessage({ messageId, conversationId, userId, content }) {
   const intent = detectIntent(content);
   const is_complaint = COMPLAINT_SIGNALS.some(s => lower.includes(s));
   const is_feature_request = FEATURE_SIGNALS.some(s => lower.includes(s));
+  const language = detectLanguage(content);
 
   const pool = getDb();
 
   await pool.query(
     `INSERT INTO message_analytics
-     (id, message_id, conversation_id, user_id, sentiment, sentiment_score, topics, intent, is_complaint, is_feature_request, keywords)
-     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+     (id, message_id, conversation_id, user_id, sentiment, sentiment_score, topics, intent, is_complaint, is_feature_request, keywords, language)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
      ON CONFLICT (id) DO NOTHING`,
     [uuidv4(), messageId, conversationId, userId, sentiment, sentiment_score,
-     JSON.stringify(topics), intent, is_complaint, is_feature_request, JSON.stringify(keywords)]
+     JSON.stringify(topics), intent, is_complaint, is_feature_request, JSON.stringify(keywords), language]
   );
+
+  // Auto-escalate if complaint detected — upsert outcome record
+  if (is_complaint) {
+    await pool.query(
+      `INSERT INTO conversation_outcomes (conversation_id, escalated, updated_at)
+       VALUES ($1, TRUE, NOW())
+       ON CONFLICT (conversation_id) DO UPDATE SET
+         escalated = TRUE,
+         updated_at = NOW()`,
+      [conversationId]
+    );
+  }
 
   // Upsert topic summary — atomic, fixes race condition
   for (const topic of topics) {
@@ -110,6 +143,7 @@ async function getOverviewStats(days = 30) {
     total, sentimentBreakdown, complaints, features, avgScore,
     byIntent, topTopics, dailyVolume, recentComplaints,
     avgLatency, activeUsers, peakHours, returningUsers,
+    languageBreakdown, escalationCount,
   ] = await Promise.all([
     pool.query('SELECT COUNT(*)::int as n FROM message_analytics WHERE analyzed_at >= $1', [since]),
     pool.query('SELECT sentiment, COUNT(*)::int as count FROM message_analytics WHERE analyzed_at >= $1 GROUP BY sentiment', [since]),
@@ -141,12 +175,20 @@ async function getOverviewStats(days = 30) {
         SELECT user_id FROM conversations WHERE created_at >= $1
         GROUP BY user_id HAVING COUNT(*) > 1
       ) sub`, [since]),
+    pool.query(`
+      SELECT COALESCE(language, 'en') as language, COUNT(*)::int as count
+      FROM message_analytics WHERE analyzed_at >= $1
+      GROUP BY language ORDER BY count DESC LIMIT 10`, [since]),
+    pool.query(`
+      SELECT COUNT(*)::int as n FROM conversation_outcomes
+      WHERE escalated = TRUE AND updated_at >= $1`, [since]),
   ]);
 
   return {
     total: total.rows[0].n,
     complaints: complaints.rows[0].n,
     feature_requests: features.rows[0].n,
+    escalations: escalationCount.rows[0].n,
     avg_sentiment: parseFloat((avgScore.rows[0].avg || 0).toFixed(3)),
     avg_latency_ms: avgLatency.rows[0].avg || 0,
     active_users: activeUsers.rows[0].n,
@@ -157,7 +199,22 @@ async function getOverviewStats(days = 30) {
     daily_volume: dailyVolume.rows,
     recent_complaints: recentComplaints.rows,
     peak_hours: peakHours.rows,
+    language_breakdown: languageBreakdown.rows,
   };
 }
 
-module.exports = { analyzeMessage, getOverviewStats };
+async function resolveConversation(conversationId, note = '') {
+  const pool = getDb();
+  await pool.query(
+    `INSERT INTO conversation_outcomes (conversation_id, resolved, resolution_note, resolved_at, updated_at)
+     VALUES ($1, TRUE, $2, NOW(), NOW())
+     ON CONFLICT (conversation_id) DO UPDATE SET
+       resolved = TRUE,
+       resolution_note = $2,
+       resolved_at = NOW(),
+       updated_at = NOW()`,
+    [conversationId, note]
+  );
+}
+
+module.exports = { analyzeMessage, getOverviewStats, resolveConversation };

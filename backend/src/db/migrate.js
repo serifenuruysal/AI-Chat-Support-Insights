@@ -36,6 +36,7 @@ async function migrate() {
         is_complaint BOOLEAN DEFAULT FALSE,
         is_feature_request BOOLEAN DEFAULT FALSE,
         keywords JSONB DEFAULT '[]',
+        language TEXT DEFAULT 'en',
         analyzed_at TIMESTAMPTZ DEFAULT NOW()
       );
 
@@ -46,6 +47,17 @@ async function migrate() {
         last_seen TIMESTAMPTZ DEFAULT NOW(),
         sample_messages JSONB DEFAULT '[]'
       );
+
+      CREATE TABLE IF NOT EXISTS conversation_outcomes (
+        conversation_id TEXT PRIMARY KEY REFERENCES conversations(id),
+        resolved BOOLEAN DEFAULT FALSE,
+        escalated BOOLEAN DEFAULT FALSE,
+        resolution_note TEXT,
+        resolved_at TIMESTAMPTZ,
+        updated_at TIMESTAMPTZ DEFAULT NOW()
+      );
+
+      ALTER TABLE message_analytics ADD COLUMN IF NOT EXISTS language TEXT DEFAULT 'en';
 
       CREATE INDEX IF NOT EXISTS idx_messages_conv ON messages(conversation_id);
       CREATE INDEX IF NOT EXISTS idx_analytics_user ON message_analytics(user_id);

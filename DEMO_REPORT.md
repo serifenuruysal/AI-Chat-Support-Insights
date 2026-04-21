@@ -206,29 +206,6 @@ Results stored per message and rolled up into live aggregates atomically — no 
 
 ---
 
-## Database Schema
-
-```
-conversations
-  id, user_id, created_at, updated_at, metadata (JSONB)
-
-messages
-  id, conversation_id, role ('user'|'assistant'|'system'),
-  content, created_at, tokens_used, ai_provider, latency_ms
-
-message_analytics
-  id, message_id, conversation_id, user_id,
-  sentiment, sentiment_score, topics (JSONB),
-  intent, is_complaint, is_feature_request,
-  keywords (JSONB), analyzed_at
-
-topic_summary
-  topic (PK), count, sentiment_avg,
-  last_seen, sample_messages (JSONB, max 5)
-```
-
-All tables indexed on high-frequency query columns: `user_id`, `conversation_id`, `sentiment`, `is_complaint`, `analyzed_at`.
-
 ---
 
 ## Security & Reliability
@@ -307,20 +284,7 @@ messengerDemo/
 
 ---
 
-## Recommended Next Steps
 
-| Priority | Item |
-|---|---|
-| High | Replace `userId` with JWT authentication tied to real AlemX user accounts |
-| High | Add webhook / email alert to `hello@alemx.com` when high-severity complaint is detected |
-| High | Continuously expand system prompt as AlemX adds features (card limits, token listing dates, etc.) |
-| Medium | Per-user rate limiting (currently IP-based) |
-| Medium | Conversation session timeout — auto-close after 30 min inactivity |
-| Medium | Upgrade topic detection from keyword rules to embeddings for semantic accuracy |
-| Medium | Human escalation panel — flag conversations for AlemX support team to review |
-| Low | A/B testing between Claude and OpenAI to track response quality per topic |
-| Low | Push notifications when support ticket is resolved |
-| Low | Integrate AlemX user accounts for personalised support context |
 
 ---
 
