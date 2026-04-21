@@ -1,7 +1,7 @@
 # AlemX AI Support — Demo Report
 ### AI-Powered Customer Support Platform for AlemX
 **Prepared for:** Project Owner  
-**Date:** April 2026  
+**Date:** April 21, 2026  
 **Version:** 1.0.0  
 **Status:** Live & Deployed
 
@@ -13,7 +13,7 @@ AlemX AI Support is a production-grade, AI-powered customer support platform bui
 
 The platform combines a cross-platform mobile application (iOS, Android, Web) with an intelligent backend that automatically analyzes every support conversation in real time — giving the AlemX product team instant visibility into what users are struggling with, what features they want, and how they feel about the product.
 
-The AI assistant is fully trained on AlemX's product suite: the Paid Attention Marketplace, $Alem token, KYC verification, cross-border payments, encrypted messenger, Web3 wallet, and Founding Creator program.
+The AI assistant is fully trained on AlemX's complete product suite: Paid Attention Marketplace, $Alem token, KYC verification, integrated trading, borderless payments, peer-to-peer transfers, partner bank onboarding, revenue sharing, DApp interoperability, AlemX Visa card, Founding Creator program, and the global city tour roadmap.
 
 The platform is fully deployed, live on Railway (backend) and Vercel (web), and ready for demonstration.
 
@@ -31,7 +31,7 @@ The platform is fully deployed, live on Railway (backend) and Vercel (web), and 
 
 ## What the Product Does
 
-AlemX users open the app and chat with an AI support assistant that knows everything about AlemX's platform. The assistant handles questions about the Paid Attention Marketplace, $Alem token, KYC verification, cross-border payments, wallet connectivity, and the Founding Creator program — escalating to `hello@alemx.com` when needed.
+AlemX users open the app and chat with an AI support assistant that knows everything about AlemX's platform. The assistant handles questions across the full product — from PoA protocol and $Alem token to Visa card activation, city event dates, and DApp connectivity — always escalating to `hello@alemx.com` when a human touch is needed.
 
 Every message is automatically tagged in the background — sentiment, intent, topic, complaints, feature requests — and all of that intelligence surfaces in a real-time analytics dashboard available to the AlemX product and support teams.
 
@@ -41,25 +41,27 @@ The result: support that scales infinitely with zero human agents, and product i
 
 ## AI Assistant — What It Knows
 
-The assistant is fully briefed on AlemX's product suite via a detailed system prompt. It handles:
+The assistant is fully briefed on AlemX's complete product suite. It handles:
 
 | Topic | What It Can Help With |
 |---|---|
-| **Paid Attention Marketplace** | How PoA protocol works, setting message prices, earning from posts and replies, creator revenue sharing |
-| **$Alem Token** | Token utility, earning rewards, platform payments — with a strict no-financial-advice policy |
-| **KYC Verification** | Document requirements, rejection reasons, re-submission steps, KYC reuse across partner banks |
-| **Integrated Trading & Payments** | Trading stocks/crypto/tokens, failed trades, region restrictions, seamless checkout flow |
-| **Peer-to-Peer Network** | Instant transfers via @handle or QR code, memos, recurring payments setup |
-| **Borderless Payments** | Cross-border transfers (1–3 business days), live exchange rates, near-instant settlement |
+| **Paid Attention Marketplace** | PoA protocol, setting message/call prices, earning from posts and replies, inbox monetization |
+| **Founding Creator Program** | Eligibility (first 1,000 users), lifetime badge, double income, how to apply at alemx.com |
+| **$Alem Token** | Token utility, pre-listing price, vesting schedule, Tier 1/2 exchange listings, SocialFi positioning |
+| **AlemX Visa Card** | Physical/virtual card, activation steps, declined transactions, spending limits |
+| **KYC Verification** | Document requirements, rejection reasons, re-submission, KYC reuse across partner banks |
+| **Integrated Trading & Payments** | Stocks/crypto/token trading, failed trades, region restrictions, seamless checkout |
+| **Peer-to-Peer Network** | Instant transfers via @handle or QR code, memos, recurring payments |
+| **Borderless Payments** | Cross-border transfers, live exchange rates, near-instant settlement, corridor timelines |
 | **Partner Bank Onboarding** | Opening bank accounts, KYC reuse, guided checklists, pending status troubleshooting |
 | **Revenue Sharing** | Creator earnings splits, payout tracking, configuring percentages per content type |
-| **DApp Interoperability** | Connecting Web3 wallets, WalletConnect support, DeFi protocol discovery, asset movement |
-| **Encrypted Messenger** | Paid messaging setup, pricing calls, video call configuration |
-| **Founding Creator Program** | Eligibility (first 1,000 users), exclusive benefits, standard creator program alternative |
-| **Security** | Never requests private keys or seed phrases — flags impersonation attempts |
+| **DApp Interoperability** | WalletConnect, DeFi protocol discovery, asset movement, wallet connectivity |
+| **Value Transfer on Social** | Gifting stocks/crypto/cash in posts, transferring to Web3 wallet or bank card |
+| **City Events & Global Tour** | Full schedule: 15 cities across Europe, LATAM, Africa, SEA + Dubai conference Apr 27, 2027 |
+| **Encrypted Messenger** | Paid messaging, pricing video calls, end-to-end encryption |
+| **Security** | Never requests private keys or seed phrases — flags impersonation attempts immediately |
 
-**Escalation:** For unresolved issues the assistant always directs users to `hello@alemx.com` and `alemx.com`.
-
+**Escalation:** For unresolved issues the assistant always directs users to `hello@alemx.com` and `alemx.com`.  
 **Language:** Responds in the same language the user writes in.
 
 ---
@@ -68,20 +70,20 @@ The assistant is fully briefed on AlemX's product suite via a detailed system pr
 
 ### 1. AI Chat Interface
 - Real-time conversation with an AlemX-trained AI support assistant
-- Supports **Claude (Anthropic)**, **OpenAI (GPT-4o)**, or a built-in mock provider — switchable via environment variable with no code changes
-- Full **markdown rendering** in responses: bold, italic, bullet lists, numbered steps (including OpenAI's split-line format), headings, code snippets, blockquotes
+- Supports **Claude (Anthropic)**, **OpenAI (GPT-4o)**, or a built-in mock provider — switchable via a single environment variable with no code changes
+- Full **markdown rendering** in responses: bold, italic, bullet lists, numbered steps (handles OpenAI's split-line format), headings, code snippets, blockquotes, horizontal rules
 - Typing indicator while AI is generating a response
 - Conversation history persists across sessions
-- **Suggested prompts** tailored to AlemX: Paid Attention Marketplace, $Alem Token, KYC, Cross-border Payments
-- **Quick topic chips**: Attention Marketplace, $Alem Token, KYC Verification, Payments & Transfers, Wallet & Web3, Founding Creator
-- "Start New Conversation" always creates a fresh thread, never reopens a previous one
+- **Suggested prompts** on empty state — 6 AlemX-specific questions to guide new users
+- **12 quick topic chips** on the conversations screen covering all major AlemX features
+- "Start New Conversation" always creates a truly fresh thread (never reopens previous session)
 - Enter key sends message (mobile-optimised)
 
 ### 2. Conversation Management
-- Full conversation history per user
-- Search conversations by content
+- Full conversation history per user with search by content
 - Relative timestamps ("5m ago", "2d ago")
-- Visual conversation list with message counts and hero status banner ("Online · Available 24/7")
+- Hero banner: AI avatar with live green online dot, "Available 24/7" status badge
+- Visual conversation list with message counts and AI avatar
 - Multi-user support: 5 independent test user slots with persistent storage
 
 ### 3. Real-Time Analytics Dashboard
@@ -99,22 +101,22 @@ The analytics screen gives the AlemX product team a live view of support health:
 
 **Visual breakdowns:**
 - Daily message volume line chart (7 / 14 / 30 / 90 day windows)
-- Top topics horizontal bar chart
+- Top topics horizontal bar chart with colour coding
 - Sentiment breakdown (positive / neutral / negative) with progress bars
 - Intent breakdown (complaint / feature request / question / support / general)
-- Recent complaints feed (last 20, with full message content and topic badges)
+- Recent complaints feed — last 20 with full message content and topic badges
 
 **Demo mode:** Pre-loaded mock data for presentations without a live backend connection
 
 ### 4. Background Intelligence Pipeline
-Every user message is automatically processed through four analysis algorithms — completely invisible to the user and non-blocking to the response:
+Every user message is automatically processed through four analysis algorithms — completely invisible to the user, non-blocking to the AI response:
 
-- **Sentiment Analysis** — scores each message on a -1 to +1 scale, classifies as positive / neutral / negative. Negative signals weighted 1.5× heavier than positive.
-- **Topic Extraction** — tags messages across 8 AlemX product areas: wallet, payment card, KYC, messenger, marketplace, social, onboarding, performance
+- **Sentiment Analysis** — scores each message -1 to +1, classifies as positive / neutral / negative. Negative signals weighted 1.5× heavier.
+- **Topic Extraction** — tags messages across **16 AlemX-specific topic buckets**: attention marketplace, $alem token, KYC, trading, P2P transfers, borderless payments, partner banks, revenue sharing, DApp/wallet, Visa card, city events, value transfer, messenger, social, onboarding, performance
 - **Intent Classification** — detects complaint, feature request, question, support request, or general inquiry
-- **Keyword Extraction** — pulls the 8 most meaningful non-stopword tokens from each message
+- **Keyword Extraction** — pulls the 8 most meaningful non-stopword tokens per message
 
-Results are stored per message and rolled up into live aggregates atomically — no data races, no double-counts.
+Results stored per message and rolled up into live aggregates atomically — no data races, no double-counts.
 
 ---
 
@@ -161,15 +163,17 @@ Results are stored per message and rolled up into live aggregates atomically —
 
 **Non-blocking analytics:** The analysis pipeline runs via `setImmediate` — the AI response is returned to the user immediately, analytics happen in the background. Users never wait for tagging.
 
-**Provider abstraction:** The AI provider is a single `chat()` function. Switching from OpenAI to Claude to mock requires only one environment variable change — no code changes, no redeployment.
+**Provider abstraction:** The AI provider is a single `chat()` function. Switching from OpenAI to Claude to mock requires only one environment variable — no code changes, no redeployment.
 
 **Atomic topic upserts:** Topic summary updates use PostgreSQL `INSERT ... ON CONFLICT DO UPDATE` — no race conditions when multiple messages arrive simultaneously about the same topic.
 
-**Environment-aware API URLs:** The mobile app automatically points to `localhost` in development and the Railway URL in production using `process.env.NODE_ENV`.
+**Environment-aware API URLs:** The mobile app uses `process.env.NODE_ENV` to automatically switch between localhost (development) and the Railway URL (production). Vercel correctly sets `NODE_ENV=production` at build time.
 
-**Persistent database:** Migrated from SQLite to PostgreSQL on Railway — data survives all redeployments. Migrations run automatically on every server startup.
+**Persistent database:** Migrated from SQLite to PostgreSQL on Railway — data survives all redeployments. Migrations run automatically on every server startup via async `migrate()` before Express binds.
 
-**Force-new conversations:** A `forceNew` flag ensures "Start New Conversation" always creates a fresh DB row, never reopening the previous session.
+**Force-new conversations:** A `forceNew` flag sent from the client ensures "Start New Conversation" always inserts a fresh DB row, never re-opening the most recent session.
+
+**Trust proxy:** `app.set('trust proxy', 1)` configured for Railway's load balancer — fixes express-rate-limit crash on `X-Forwarded-For` header.
 
 ---
 
@@ -195,7 +199,7 @@ Results are stored per message and rolled up into live aggregates atomically —
 | Database | PostgreSQL via `pg` connection pool (max 10) |
 | AI — Claude | @anthropic-ai/sdk 0.39 |
 | AI — OpenAI | openai SDK 4.24 (GPT-4o default) |
-| Real-time | WebSocket (`ws` 8.14) with heartbeat |
+| Real-time | WebSocket (`ws` 8.14) with 30s heartbeat |
 | Validation | Zod 3.22 |
 | Security | Helmet, CORS, express-rate-limit |
 | Deployment | Railway (Dockerfile + auto-migrate on startup) |
@@ -233,14 +237,14 @@ All tables indexed on high-frequency query columns: `user_id`, `conversation_id`
 |---|---|
 | Rate limiting | 60 requests/minute per IP via express-rate-limit |
 | Security headers | Helmet (XSS, CSRF, content-type sniffing) |
-| Input validation | Zod schemas on all POST endpoints (max 4000 chars) |
+| Input validation | Zod schemas on all POST endpoints (max 4,000 chars) |
 | CORS | Configured for all origins |
 | Proxy trust | `trust proxy = 1` for Railway's load balancer |
 | DB connections | Connection pool (max 10), idle timeout 30s |
 | Server restart | Railway auto-restart on failure (max 3 retries) |
 | Health check | `/health` endpoint monitored by Railway every 30s |
-| Secrets | All keys via Railway environment variables, never in code |
-| AI security | Assistant never requests private keys or seed phrases |
+| Secrets | All API keys via Railway environment variables, never in code |
+| AI safety | Assistant never requests private keys or seed phrases |
 
 ---
 
@@ -252,50 +256,54 @@ messengerDemo/
 │   ├── src/
 │   │   ├── screens/
 │   │   │   ├── ChatScreen.tsx       # Chat UI + full markdown renderer
-│   │   │   ├── ConversationsScreen.tsx  # Conversation list + topic chips
+│   │   │   ├── ConversationsScreen.tsx  # Hero banner + 12 topic chips
 │   │   │   ├── AnalyticsScreen.tsx  # Analytics dashboard (live + demo)
-│   │   │   └── SettingsScreen.tsx   # Multi-user test slots
+│   │   │   └── SettingsScreen.tsx   # 5 test user slots
 │   │   ├── hooks/
-│   │   │   └── useChat.ts           # All chat state + forceNew logic
+│   │   │   └── useChat.ts           # Chat state, forceNew, optimistic UI
 │   │   ├── services/
-│   │   │   ├── api.ts               # HTTP client (dev/prod switching)
+│   │   │   ├── api.ts               # HTTP client (NODE_ENV-based switching)
 │   │   │   └── storage.ts           # AsyncStorage / localStorage abstraction
-│   │   ├── theme/index.ts           # Colors, spacing, radius tokens
+│   │   ├── theme/index.ts           # Colors, spacing, radius design tokens
 │   │   └── types/index.ts           # TypeScript interfaces
-│   └── vercel.json                  # Vercel web deployment config
+│   └── vercel.json                  # Expo web export config for Vercel
 │
 └── ai-chatbot/
     └── backend/                     # Express API (Railway)
         ├── src/
-        │   ├── index.js             # Express app + async startup
+        │   ├── index.js             # Async startup, await migration, trust proxy
         │   ├── routes/
-        │   │   ├── chat.js          # Chat endpoints (Zod validated)
-        │   │   └── analytics.js     # Analytics overview endpoint
+        │   │   ├── chat.js          # Chat endpoints (Zod validated, forceNew support)
+        │   │   └── analytics.js     # Analytics overview (async)
         │   ├── services/
-        │   │   ├── chatService.js   # Conversation + message logic
-        │   │   ├── aiProvider.js    # Claude / OpenAI / Mock + AlemX prompt
-        │   │   ├── analyticsService.js  # Tagging pipeline + DB queries
-        │   │   └── websocketService.js  # WebSocket + heartbeat
+        │   │   ├── chatService.js   # Conversation logic, forceNew, history fetch
+        │   │   ├── aiProvider.js    # Claude / OpenAI / Mock + full AlemX prompt
+        │   │   ├── analyticsService.js  # 16-topic pipeline, parallel queries
+        │   │   └── websocketService.js  # WebSocket + 30s heartbeat
         │   └── db/
-        │       ├── index.js         # PostgreSQL connection pool
-        │       └── migrate.js       # Auto-run schema migrations
-        └── Dockerfile               # node:20-alpine, no native deps
+        │       ├── index.js         # PostgreSQL pool (SSL auto-detect)
+        │       └── migrate.js       # Exported async migrate(), idempotent
+        └── Dockerfile               # node:20-alpine, production deps only
 ```
 
 ---
 
 ## What's Ready for Demo
 
-- ✅ AI assistant fully trained on AlemX product suite (PoA, $Alem, KYC, payments, wallet, Founding Creator)
-- ✅ Real AI responses via OpenAI GPT-4o or Claude (switchable)
-- ✅ Full markdown formatting in responses (lists, bold, numbered steps)
-- ✅ Full conversation history, search, and multi-user switching
-- ✅ Analytics dashboard with live data and demo mode
-- ✅ Background sentiment, topic, and intent tagging on every message
-- ✅ Mobile app running on iOS, Android, and web browser
-- ✅ Persistent PostgreSQL database — data survives all redeployments
-- ✅ Production deployment on Railway + Vercel
-- ✅ "Start New Conversation" always creates a truly fresh thread
+- ✅ AI assistant fully trained on complete AlemX product suite (15 topic areas)
+- ✅ Real AI responses via OpenAI GPT-4o or Claude — switchable via env var
+- ✅ Full markdown rendering (bold, italic, lists, numbered steps, headings, code)
+- ✅ Full conversation history, search, multi-user switching (5 test slots)
+- ✅ 12 quick topic chips covering all AlemX features
+- ✅ 6 contextual suggested prompts on empty chat state
+- ✅ Analytics dashboard — live data + demo mode with mock dataset
+- ✅ 16-bucket topic detection tuned to AlemX product areas
+- ✅ Background sentiment, intent, and keyword tagging on every message
+- ✅ Mobile app on iOS, Android, and web browser (Vercel)
+- ✅ Persistent PostgreSQL on Railway — data survives all redeployments
+- ✅ Production URL correctly resolved (NODE_ENV fix for Vercel builds)
+- ✅ "Start New Conversation" always creates a fresh thread
+- ✅ Rate limiter working correctly behind Railway's proxy
 
 ---
 
@@ -305,12 +313,14 @@ messengerDemo/
 |---|---|
 | High | Replace `userId` with JWT authentication tied to real AlemX user accounts |
 | High | Add webhook / email alert to `hello@alemx.com` when high-severity complaint is detected |
-| High | Expand system prompt with AlemX-specific FAQ content as the product grows |
+| High | Continuously expand system prompt as AlemX adds features (card limits, token listing dates, etc.) |
 | Medium | Per-user rate limiting (currently IP-based) |
-| Medium | Conversation session timeout (auto-close after 30 min inactivity) |
-| Medium | Upgrade analytics tagging from keyword rules to embeddings for semantic accuracy |
+| Medium | Conversation session timeout — auto-close after 30 min inactivity |
+| Medium | Upgrade topic detection from keyword rules to embeddings for semantic accuracy |
+| Medium | Human escalation panel — flag conversations for AlemX support team to review |
 | Low | A/B testing between Claude and OpenAI to track response quality per topic |
-| Low | Human escalation panel — flag conversations for AlemX support team review |
+| Low | Push notifications when support ticket is resolved |
+| Low | Integrate AlemX user accounts for personalised support context |
 
 ---
 
